@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.control.ListView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.UUID;
 
@@ -25,8 +27,8 @@ public class Controller {
     @FXML
     private ListView<Patient> patientsListView;
 
-//    @FXML
-//    private ListView<Patient> patientListView;
+    @FXML
+    private ListView<Patient> patientListView;
 
     final String SQL_URL = "jdbc:mysql://localhost:3306/test";
 
@@ -37,11 +39,11 @@ public class Controller {
             try {
                 stmt.execute("CREATE TABLE test (" +
                         "Name CHAR(25), " +
-                        "Age Int(3), " +
-                        "Gender CHAR(1), " +
-                        "BloodType CHAR(3), " +
-                        "Weight CHAR(5), " +
-                        "Height CHAR(4), " +
+                        "Age Int(5), " +
+                        "Gender CHAR(5), " +
+                        "BloodType CHAR(5), " +
+                        "Weight Int(5), " +
+                        "Height CHAR(5), " +
                         "PatientID VARCHAR(36) )" );
 
                 System.out.println("TABLE CREATED");
@@ -62,7 +64,10 @@ public class Controller {
 
             String sql = "INSERT INTO test VALUES" +
                     "('" + patientName + "', '" + patientAge + "', '" + gender + "', '" + bloodType + "', '" + weight + "', '" + height + "', '" + patientID + "')";
+
             stmt.executeUpdate(sql);
+
+
             System.out.println("TABLE FILLED");
 
             stmt.close();
@@ -73,7 +78,6 @@ public class Controller {
             System.out.println(msg);
         }
     }
-
 
 
 
@@ -98,7 +102,39 @@ public class Controller {
 
     }
 
+    private  void loadTable (String url) {
+        try {
+            Connection conn = DriverManager.getConnection(url, "root", "password");
+            Statement stmt = conn.createStatement();
 
+            String sqlStatement = "SELECT * FROM test";
+            ResultSet result = stmt.executeQuery(sqlStatement);
+
+            ObservableList<Patient> dbPatients = FXCollections.observableArrayList();
+            while (result.next()) {
+
+                Patient patient = new Patient();
+                patient.setPatientName(result.getString("Name"));
+                patient.setPatientAge(result.getInt("Age"));
+                patient.setGender(result.getString("Gender"));
+                patient.setBloodType(result.getString("BloodType"));
+                patient.setWeight(result.getInt("Weight"));
+                patient.setHeight(result.getString("Height"));
+                patient.patientID = UUID.fromString(result.getString("PatientID"));
+                dbPatients.add(patient);
+
+            }
+
+            patientListView.setItems(dbPatients);
+
+            stmt.close();
+            conn.close();
+
+    } catch (Exception ex) {
+        String msg = ex.getMessage();
+        System.out.println(msg);
+        }
+    }
 
     @FXML private void handleCreateAction(ActionEvent event) {
         createTable(SQL_URL);
@@ -109,15 +145,7 @@ public class Controller {
     }
 
     @FXML private void handleLoadAction(ActionEvent event) {
-//        ObservableList<Patient> items = patientsListView.getItems();
-//        UUID id = UUID.randomUUID();
-//        String idString = id.toString();
-//        Patient Patient1 = new Patient(idString, "Jane Doe", 31, "F", "A", 156, "5:9" );
-//        Patient Patient2 = new Patient(idString, "Jhon Doe", 27, "M", "O", 180, "5:11");
-//        Patient Patient3 = new Patient(idString, "Kurt Ambrose", 51, "M", "B", 185, "6:1");
-//
-//        items.add(Patient1);
-//        items.add(Patient2);
-//        items.add(Patient3);
+        loadTable(SQL_URL);
+
     }
 }
