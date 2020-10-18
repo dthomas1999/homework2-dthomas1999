@@ -24,24 +24,28 @@
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes>
-      <connection connection-id="b05084a3-e033-40d9-a827-452bd1ced166">
-        <schema name="test" object-types="function, constraint, view, index, table, procedure, dataset trigger, column" />
+      <connection connection-id="2cc3c673-f24a-431e-bfcc-99fbb82d1fa8">
+        <schema name="test" object-types="column, dataset trigger, view, procedure, index, constraint, table, function" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="b05084a3-e033-40d9-a827-452bd1ced166">
-      <console name="Connection" type="STANDARD" schema="mysql" session="Main" />
+    <connection id="2cc3c673-f24a-431e-bfcc-99fbb82d1fa8">
+      <console name="local" type="STANDARD" schema="mysql" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="b05084a3-e033-40d9-a827-452bd1ced166" />
+    <connection id="2cc3c673-f24a-431e-bfcc-99fbb82d1fa8" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="b05084a3-e033-40d9-a827-452bd1ced166" dataset="test.test" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="2cc3c673-f24a-431e-bfcc-99fbb82d1fa8" dataset="test.test" active-filter-id="EMPTY_FILTER">
+      <filter id="fd7971bf-48a5-4152-806d-dcf212990644" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="Age" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -66,7 +70,7 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="b05084a3-e033-40d9-a827-452bd1ced166" active="true">
+      <connection id="2cc3c673-f24a-431e-bfcc-99fbb82d1fa8" active="true">
         <database>
           <name value="local" />
           <description value="" />
@@ -74,8 +78,8 @@
           <config-type value="BASIC" />
           <database-version value="8.0" />
           <driver-source value="BUILTIN" />
-          <driver-library value="" />
-          <driver value="" />
+          <driver-library value="C:\Users\dthom\Documents\Java work\mysql-connector-java-5.1.49.jar" />
+          <driver value="com.mysql.jdbc.Driver" />
           <url-type value="DATABASE" />
           <host value="localhost" />
           <port value="3306" />
@@ -118,7 +122,7 @@
           <max-connection-pool-size value="7" />
           <alternative-statement-delimiter value="" />
         </details>
-        <object-filters hide-empty-schemas="true" hide-pseudo-columns="false">
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false">
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />
             <object-type name="USER" enabled="true" />

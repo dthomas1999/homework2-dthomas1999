@@ -19,13 +19,13 @@ public class Controller {
     private Button createB;
 
     @FXML
+    private Button populateB;
+
+    @FXML
     private Button deleteB;
 
     @FXML
     private Button loadB;
-
-    @FXML
-    private ListView<Patient> patientsListView;
 
     @FXML
     private ListView<Patient> patientListView;
@@ -37,7 +37,7 @@ public class Controller {
             Connection conn = DriverManager.getConnection(url, "root", "password");
             Statement stmt = conn.createStatement();
             try {
-                stmt.execute("CREATE TABLE test (" +
+                stmt.execute("CREATE TABLE Patients (" +
                         "Name CHAR(25), " +
                         "Age Int(5), " +
                         "Gender CHAR(5), " +
@@ -52,22 +52,38 @@ public class Controller {
                 System.out.println(msg);
             }
 
-            UUID id = UUID.randomUUID();
-            String patientID = id.toString();
-            String patientName = "John Doe";
-            String patientAge = "27";
-            String gender = "M";
-            String bloodType = "O";
-            String weight = "180";
-            String height = "5";
+            stmt.close();
+            conn.close();
+
+        } catch (Exception ex) {
+            String msg = ex.getMessage();
+            System.out.println(msg);
+        }
+    }
 
 
-            String sql = "INSERT INTO test VALUES" +
-                    "('" + patientName + "', '" + patientAge + "', '" + gender + "', '" + bloodType + "', '" + weight + "', '" + height + "', '" + patientID + "')";
+    private void populateTable (String url) {
+        try {
+            Connection conn = DriverManager.getConnection(url, "root", "password");
+            Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate(sql);
+            for (int i = 0; i < 9; i++) {
+                UUID id = UUID.randomUUID();
+                String patientID = id.toString();
+                String patientName = "John Doe";
+                String patientAge = "27";
+                String gender = "M";
+                String bloodType = "O";
+                String weight = "180";
+                String height = "5";
 
 
+                String sql = "INSERT INTO Patients VALUES" +
+                        "('" + patientName + "', '" + patientAge + "', '" + gender + "', '" + bloodType + "', '" + weight + "', '" + height + "', '" + patientID + "')";
+
+                stmt.executeUpdate(sql);
+
+            }
             System.out.println("TABLE FILLED");
 
             stmt.close();
@@ -80,18 +96,19 @@ public class Controller {
     }
 
 
-
     private void deleteTable(String url) {
         try {
             Connection conn = DriverManager.getConnection(url, "root", "password");
             Statement stmt = conn.createStatement();
 
-            stmt.execute("DROP TABLE test");
+            stmt.execute("DROP TABLE Patients");
 
-            System.out.println("TABLE DELETED");
 
             stmt.close();
             conn.close();
+
+            System.out.println("TABLE DELETED");
+
 
         } catch (Exception ex) {
             String msg = ex.getMessage();
@@ -106,10 +123,8 @@ public class Controller {
         try {
             Connection conn = DriverManager.getConnection(url, "root", "password");
             Statement stmt = conn.createStatement();
-
-            String sqlStatement = "SELECT * FROM test";
+            String sqlStatement = "SELECT * FROM Patients";
             ResultSet result = stmt.executeQuery(sqlStatement);
-
             ObservableList<Patient> dbPatients = FXCollections.observableArrayList();
             while (result.next()) {
 
@@ -122,10 +137,11 @@ public class Controller {
                 patient.setHeight(result.getString("Height"));
                 patient.patientID = UUID.fromString(result.getString("PatientID"));
                 dbPatients.add(patient);
-
             }
 
             patientListView.setItems(dbPatients);
+
+            System.out.println("DATA LOADED");
 
             stmt.close();
             conn.close();
@@ -147,5 +163,9 @@ public class Controller {
     @FXML private void handleLoadAction(ActionEvent event) {
         loadTable(SQL_URL);
 
+    }
+
+    @FXML private void handlePopulateAction(ActionEvent event) {
+        populateTable(SQL_URL);
     }
 }
